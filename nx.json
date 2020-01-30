@@ -10,5 +10,13 @@
     "tslint.json": "*",
     "nx.json": "*"
   },
-  "projects": {}
+  "projects": {
+    "workspace": {
+      "tags": []
+    },
+    "workspace-e2e": {
+      "tags": [],
+      "implicitDependencies": ["workspace"]
+    }
+  }
 }

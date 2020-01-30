@@ -1,7 +1,141 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "workspace": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/workspace",
+      "sourceRoot": "apps/workspace/src",
+      "prefix": "workspace",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/workspace",
+            "index": "apps/workspace/src/index.html",
+            "main": "apps/workspace/src/main.ts",
+            "polyfills": "apps/workspace/src/polyfills.ts",
+            "tsConfig": "apps/workspace/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "apps/workspace/src/favicon.ico",
+              "apps/workspace/src/assets"
+            ],
+            "styles": ["apps/workspace/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/workspace/src/environments/environment.ts",
+                  "with": "apps/workspace/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "workspace:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "workspace:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "workspace:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/workspace/tsconfig.app.json",
+              "apps/workspace/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/workspace/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/workspace/jest.config.js",
+            "tsConfig": "apps/workspace/tsconfig.spec.json",
+            "setupFile": "apps/workspace/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "workspace-e2e": {
+      "root": "apps/workspace-e2e",
+      "sourceRoot": "apps/workspace-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/workspace-e2e/cypress.json",
+            "tsConfig": "apps/workspace-e2e/tsconfig.e2e.json",
+            "devServerTarget": "workspace:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "workspace:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/workspace-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/workspace-e2e/**"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "workspace"
 }
